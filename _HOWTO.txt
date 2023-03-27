@@ -1,0 +1,49 @@
+HowTo su uso nuovo albero commessa
+
+Nome cartella commessa:[COMM_PADRE]_[CLIENTE]_[DESCRIZIONE]
+                        COMM_PADRE = Codice commessa padre (quello riportato nel Portafoglio Ordini, colonna Commessa)
+                        CLIENTE    = Codice cliente (quello riportato nel Portafoglio Ordini, colonna OdV Codice Cliente)
+                        DESCRIZIONE= Breve descrizione commessa (ad es. nome scheda). !! NON RIPORTARE IN DESCRIZIONE IL NOME CLIENTE (né esteso, né abbreviato) !!
+
+- 1_PRJ -> Albero progettazione elettronica. Contiene schema elettrico e dati per la sua generazione.
+- 2_PCB -> Albero PCB Design. Contiene database sbroglio e dati per la sua generazione.
+- 3_PRO -> Albero Produzione NPI. Contiene le elaborazioni dell'NPI per la generazione dei file di acquisto/assemblaggio scheda
+- 4_MEC -> Albero progettazione meccanica. Contiene il database meccanico e gli output di produzione meccanica (DXF, STP, ecc...)
+- 5_SIM -> Albero simulazione. Contiene il database di simulazione SI/PI e input (ad es. modelli IBIS) necessari per la simulazione.
+
+OdP_Yxxxxx_A -> Cartella contenente ZIP della documentazione costruttiva e BOM.
+                REGOLE:
+                1. Al posto di Yxxxxx va inserito il codice dell'OdP di PCB Design.
+                2. Ogni cartella OdP_Yxxxxx_A identifica un assemblaggio, pertanto al suo interno deve comparire UNA sola bom e UNA sola doc costruttiva.
+                3. In caso di diversa BOM ma stesso stampato (ossia montaggi differenti) DEVE essere creata una nuova cartella OdP_Yxxxxx_B che contiene l'associazione BOM-CS.
+                
+                Caso 1. ZIP Doc in formato LINK/MWFEP -> La bom DEVE comparire SOLO dentro la cartella OdP_Yxxxxx_A\BOM e NON dentro lo zip.
+                                                         Se lo schema è generato da 1_PRJ è il progettista a riempire la cartella OdP_Yxxxxx_A\BOM.
+                                                         Se lo schema è generato dal cliente, è il masterista che richiede la bom l cliente e la deposita nella cartella OdP_Yxxxxx_A\BOM.
+                                                         
+                Caso 2. Zip Doc in formato Cliente    -> Se nell'albero della doc cliente è presente una cartella per la BOM, questa va depositata nella cartella indicata dal cliente. 
+                                                         In questo caso la cartella OdP[Y12345a]\BOM DEVE rimanere VUOTA.
+                                                         Se nell'albero della doc cliente NON è presente una cartella per la BOM, questa va depositata nella cartella OdP_Yxxxxx_A\BOM.
+                                                         Se lo schema è generato da 1_PRJ è il progettista a depositare la BOM.
+                                                         Se lo schema è generato dal cliente, è il masterista che richiede la bom al cliente e la deposita.
+
+File 0000_Registro_Segnalazioni -> Contiene le segnalazioni di eventuali errori e/o cose da sistemare emerse nella commessa.
+                                   Il nome file è indicativo della presenza e della competenza delle segnalazioni non gestite. Ad esempio:
+                                   
+                                   - 1000_Registro_Segnalazioni -> Segnalazione non gestita presente, competenza Progettazione elettronica.
+                                   - 0100_Registro_Segnalazioni -> Segnalazione non gestita presente, competenza PCB Design.
+                                   - 0010_Registro_Segnalazioni -> Segnalazione non gestita presente, competenza NPI.
+                                   - 0001_Registro_Segnalazioni -> Segnalazione non gestita presente, competenza Meccanica.
+                                   
+                                   Possono essere presenti più flag a "1" nello stesso momento, ad esempio: 1101_Registro_Segnalazioni
+                                   Quando la segnalazione viene gestita/risolta, DEVE essere compilato il relativo TAB all'interno del file.
+                                   Quando la segnalazione viene gestita/risolta, nel nome del file il relativo flag a "1" DEVE essere riportato a "0".
+
+README.md	->	File tipo Markdown contenente le informazioni significative per la commessa.
+				È possibile modificarlo con un semplice editor di testo oppure direttamente sul server remoto di git.
+
+ROF_JCxx_xxx->	Collegamento all'offerta in \\mwfssrv04\1_VDT
+				Una volta creata la commessa va predisposto il link all'offerta. Per far ciò basta:
+				1. Cliccare col pulsante destro del mouse sul file
+				2. Selezionare Proprietà
+				3. Nel campo "Destinazione" incollare il link completo alla cartella dell'offerta.
